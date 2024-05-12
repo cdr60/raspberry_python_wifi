@@ -13,14 +13,14 @@ You can use it with "import" or executing it to make some tests
             BESTWIFI=ChooseWifiHotSpot("wlan0",10,mywifihotspot=['SSID1','SSID2','SSID3'])
             BESTWIFI will be a string containing SSID with best quality
 
-- USage 2 : connecting to a hotspot using WPA that you know SSID and Passphrase :
+- Usage 2 : connecting to a hotspot using WPA that you know SSID and Passphrase :
             IP=ConnectWifi("FR","wlan0","MY_SSID","MY_PASSPHRASE")
             The librarie will execute severals commands lines printing them at each step
             It will make a wpa_supplicant.conf file, ask to connect to the hotspot cia wpa_cli
             Check that the connexion is successfull  using wpa_state (and wiating while wpa_state is "SCANNING") util success or getting a timeout
             Then get check that you got an ipv4 and print it
   
-- USage 3 : Scanning accessibles Hot Spot
+- Usage 3 : Scanning accessibles Hot Spot
             ScanWifiHotSpot("wlan0",10)
             It will give ou a list of accessibles hotspot wich quality is more than 10%
 
