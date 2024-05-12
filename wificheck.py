@@ -131,6 +131,32 @@ def filter_cells(cells,minquality=0,mywifihotspot=[]):
 			#print(nssid)
 			result.append(cell)
 	return result
+	
+	
+#scan des wifi dispo
+def ScanWifiHotSpot(interface="wlan0",minquality=10):
+	result=[]
+	cells=[[]]
+	parsed_cells=[]
+	myCmd = os.popen('iwlist '+interface+' scan').read()
+	CmdLine=myCmd.split("\n")
+	for line in CmdLine:
+		cell_line = match(line,"Cell ")
+		if cell_line != None:
+			cells.append([])
+			line = cell_line[-27:]
+		cells[-1].append(line.rstrip())
+	cells=cells[1:]
+	for cell in cells:
+		parsed_cells.append(parse_cell(cell))
+	for cell in parsed_cells:
+		try:
+			q=cell["Quality"].split("%")
+			if (len(q)>0): q=int(q[0])
+		except:
+			q=0
+		if (q>=minquality): result.append(cell["Name"])
+	return result
 
 #scan des wifi dispo, tri par signal decroissant, filtre sur ceux dont le signal est suffisant et parmis une list de hotspot
 #choix du meilleur parmis ceux qui restent
@@ -175,17 +201,17 @@ def ConnectWifi(country="FR",interface="wlan0",ssid='',passw=''):
 	f.close()
 	
 	cmd="sudo chmod a+w "+conffilename
-	print(cmd)
+	#print(cmd)
 	myCmd = os.popen(cmd).read()
 	CmdLine=myCmd.split("\n")
 	
 	cmd="wpa_passphrase "+ssid+" "+passw+" >> "+conffilename
-	print(cmd)
+	#print(cmd)
 	myCmd = os.popen(cmd).read()
 	CmdLine=myCmd.split("\n")
 	
 	cmd="wpa_cli -i "+interface+" reconfigure"
-	print(cmd)
+	#print(cmd)
 	myCmd = os.popen(cmd).read()
 	CmdLine=myCmd.split("\n")
 	
@@ -194,7 +220,7 @@ def ConnectWifi(country="FR",interface="wlan0",ssid='',passw=''):
 	i=0
 	completed=""
 	cmd="wpa_cli -i "+interface+" status | grep wpa_state | cut -d= -f2"
-	print(cmd)
+	#print(cmd)
 	while (i<10) and (completed!="COMPLETED"):
 		myCmd = os.popen(cmd).read()
 		CmdLine=myCmd.split("\n")
@@ -207,7 +233,7 @@ def ConnectWifi(country="FR",interface="wlan0",ssid='',passw=''):
 	
 	i=0
 	cmd="wpa_cli -i "+interface+" status | grep ip_address | cut -d= -f2"
-	print(cmd)
+	#print(cmd)
 	while (i<10) and (result==""):
 		myCmd = os.popen(cmd).read()
 		CmdLine=myCmd.split("\n")
@@ -224,5 +250,8 @@ if __name__ == "__main__":
 #	BESTWIFI=ChooseWifiHotSpot("wlan0",10,mywifihotspot=['SFR_68B8','MAISON','acpnwifi2'])
 #	print("BESTWIFI : "+BESTWIFI)
 
-	r=ConnectWifi("FR","wlan0","piwifi4","jiqva74e")
+#	r=ConnectWifi("FR","wlan0","piwifi4","jiqva74e")
+#	print(r)
+
+	r=ScanWifiHotSpot()
 	print(r)
