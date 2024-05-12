@@ -13,7 +13,7 @@ You can use it with "import" or executing it to make some tests
             BESTWIFI=ChooseWifiHotSpot("wlan0",10,mywifihotspot=['SSID1','SSID2','SSID3'])
             BESTWIFI will be a string containing SSID with best quality
 
-  - USage 2 : connecting to a hotspot using WPA that you know SSID and Passphrase :
+- USage 2 : connecting to a hotspot using WPA that you know SSID and Passphrase :
             IP=ConnectWifi("FR","wlan0","MY_SSID","MY_PASSPHRASE")
             The librarie will execute severals commands lines printing them at each step
             It will make a wpa_supplicant.conf file, ask to connect to the hotspot cia wpa_cli
